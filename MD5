@@ -1,0 +1,15 @@
+d0840a4f45ca4ee528f1bd7d2340b502 *DESCRIPTION
+6236146ed5fa5ec54fab6470f3aeb221 *LICENSE
+37f516210580acb1b5f7ca9c49b59c97 *NAMESPACE
+d0cb266328c84d48f0ef40551292885e *NEWS
+d6f4cf7ab9025b5a5cbdfe697f6631d3 *R/build_and_insert.R
+0213361d50e05395a380fb2f75d3df50 *R/checkout_pkg.R
+b17533182d88f8e68ef74c066312d7a3 *R/install.R
+c230a65c3c0ad9c3f7bf2938b34660ef *R/parse_reponame.R
+54009c768c15b751dd52a48401f4c15b *README.md
+717a7e177848b408b076a83c1fbf6750 *inst/CITATION
+ac4346b25dbe4ab8b14b99f1afec3034 *man/ghit.Rd
+e131fc64b04fe6f2f8e64e260e034fb2 *man/install.Rd
+544881202106640f3f51b98b8df17df0 *tests/test-all.R
+43b19531b23f9469d789f9ea945d90ed *tests/testthat/test_install.R
+37da76c9f96efa4e3575a84279f43c77 *tests/testthat/test_internal.R
