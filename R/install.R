@@ -1,9 +1,11 @@
 install_github <- 
 function(repo, host = "github.com", credentials = NULL, 
          build_args = NULL, build_vignettes = TRUE, verbose = FALSE, 
-         repos = getOption("repos", c(CRAN = "http://cloud.r-project.org")),
+         repos = getOption("repos", c(CRAN = "https://cloud.r-project.org")),
          dependencies = c("Depends", "Imports", "Suggests"), ...) {
 
+    opts <- list(...)
+    
     # setup build args
     if (is.null(build_args)) {
         build_args <- ""
@@ -37,35 +39,44 @@ function(repo, host = "github.com", credentials = NULL,
         description <- read.dcf(file.path(d, "DESCRIPTION"))
         p$pkgname <- unname(description[1, "Package"])
         vers <- unname(description[1,"Version"])
-        if (p$pkgname %in% installed.packages()[, "Package"]) {
-            curr <- as.character(utils::packageVersion(p$pkgname))
+        if ("lib" %in% names(opts)) {
+            if (p$pkgname %in% installed.packages(lib.loc = c(.libPaths(), opts$lib))[, "Package"]) {
+                curr <- try(as.character(utils::packageVersion(p$pkgname, lib.loc = c(.libPaths(), opts$lib))), silent = TRUE)
+            } else {
+                curr <- NA_character_
+            }
+        } else {
+            if (p$pkgname %in% installed.packages()[, "Package"]) {
+                curr <- try(as.character(utils::packageVersion(p$pkgname)), silent = TRUE)
+            } else {
+                curr <- NA_character_
+            }
+        }
+        if (!inherits(curr, "try-error") && !is.na(curr)) {
             com <- utils::compareVersion(vers, curr)
-            if (com > 0) {
+            if (com < 0) {
                 warning(sprintf("Package %s older (%s) than currently installed version (%s).", p$pkgname, vers, curr))
             }
-        }        
-        
-        # check for compiled code
-        if (file.exists(file.path(d, "src"))) {
-            # do a check for build tools?
-            # could modify from devtools::check_build_tools()
         }
         
-        # build package
+        # build package and insert into drat
         build_and_insert(p$pkgname, d, vers, build_args, verbose = verbose)
         return(p$pkgname)
     })
     
-    if (("ghit" %in% to_install) && ("ghit" %in% loadedNamespaces())) {
-        message("ghit is being reinstalled. Please unloadNamespace('ghit') and reload.")
-    }
-    
     # install packages from drat and dependencies from CRAN
+    loaded <- to_install[to_install %in% loadedNamespaces()]
+    if (length(loaded)) {
+        if (verbose) {
+            message(sprintf("Unloading packages %s...", paste0(loaded, collapse = ", ")))
+        }
+        try(sapply(loaded, unloadNamespace))
+    }
     if (verbose) {
         message(sprintf("Installing packages%s...", 
                         if (length(dependencies)) paste0(" and ", paste(dependencies, collapse = ", ")) else ""))
     }
-    contrib <- file.path(c("TemporaryRepo" = paste0("file:", repodir), repos), "src", "contrib")
+    contrib <- file.path(c("TemporaryRepo" = paste0("file:///", repodir), repos), "src", "contrib")
     utils::install.packages(to_install, type = "source", 
                             contriburl = contrib,
                             dependencies = dependencies,
@@ -73,13 +84,20 @@ function(repo, host = "github.com", credentials = NULL,
                             quiet = !verbose,
                             ...)
     
-    opts <- list(...)
     v_out <- sapply(to_install, function(x) {
         if ("lib" %in% names(opts)) {
-            as.character(utils::packageVersion(x, lib.loc = c(.libPaths(), opts$lib)))
+            z <- try(as.character(utils::packageVersion(x, lib.loc = c(.libPaths(), opts$lib))), silent = TRUE)
         } else {
-            as.character(utils::packageVersion(x))
+            z <- try(as.character(utils::packageVersion(x)), silent = TRUE)
         }
+        if (inherits(z, "try-error")) NA_character_ else z
     })
+    if (length(loaded)) {
+        if (verbose) {
+            message(sprintf("reloading packages %s...", paste0(loaded, collapse = ", ")))
+        }
+        sapply(loaded, requireNamespace)
+    }
+    
     return(v_out)
 }
