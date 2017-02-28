@@ -35,7 +35,7 @@ function(repo, host = "github.com", credentials = NULL,
          build_args = NULL, build_vignettes = TRUE, uninstall = FALSE, 
          verbose = FALSE, 
          repos = NULL,
-         type = if (.Platform[["pkgType"]] %in% "win.binary") "both" else "source",
+         type = "source",
          dependencies = NA, ...) {
 
     opts <- list(...)
@@ -69,7 +69,7 @@ function(repo, host = "github.com", credentials = NULL,
         
         # install Suggests dependencies, non-recursively
         if ("Suggests" %in% colnames(description)) {
-            suggests <- strsplit(gsub("[[:space:]]+", "", description[1, "Suggests"]), ",")[[1L]]
+            suggests <- clean_suggests(description)
             if (isTRUE(build_vignettes) && !is.null(suggests) && suggests != "") {
                 preinstall_suggests(suggests = suggests, p = p, type = type, repos = repos, 
                                     dependencies = dependencies, verbose = verbose, ...)
