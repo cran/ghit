@@ -1,7 +1,11 @@
+# CHANGES TO v0.2.18
+
+* Switch tests to use a dummy repository <https://github.com/leeper/testghit>. (#27)
+
 # CHANGES TO v0.2.17
 
 * Made installation tests conditional on the ability to create a temporary library, hopefully eliminating CRAN errors.
-* 
+* The default `type` argument is now "source" rather than `.Platform[["pkgType"]]` on Windows. (#19)
 
 # CHANGES TO v0.2.16
 

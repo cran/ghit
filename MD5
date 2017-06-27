@@ -1,7 +1,7 @@
-ab156112b4b0ef27eecba7d2d7c01f70 *DESCRIPTION
+52cf2e38a5a3d787da3a51afa8b60cee *DESCRIPTION
 6236146ed5fa5ec54fab6470f3aeb221 *LICENSE
 9a2bbb987ede06391ba4d2c1d56d2453 *NAMESPACE
-1f8e50c335bfd06bede0a063fd014094 *NEWS.md
+af7ae8c89d415b8dff139dacacf08267 *NEWS.md
 50496b5c1c87d6b93da4b2f9c62e1875 *R/add_metadata.R
 c3e3be540a6f43aced7488d9fbf0bd62 *R/build_and_insert.R
 668e80ca8d91711bce576d8c2fb004a4 *R/check_pkg_version.R
@@ -22,5 +22,5 @@ ce55163195f0d22ebf9a786cf833ca98 *man/ghit.Rd
 032dd7a55faabef5b20f965ce11c5329 *man/install_bitbucket.Rd
 a395767cb36f3134dd4ef1a6ec07a21d *man/install_github.Rd
 544881202106640f3f51b98b8df17df0 *tests/test-all.R
-6ed8b16581100509f6b261afa4f80607 *tests/testthat/test_install.R
+6ca8a490e59c34933a94461f58bb167d *tests/testthat/test_install.R
 dd19f6f0c08202249b3a671f31e8176f *tests/testthat/test_internal.R
